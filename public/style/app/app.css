@@ -3,6 +3,7 @@
     position: absolute;
     border: #efefef 2px solid;
     border-radius: 5px;
+    background-color: #fff;
     padding: 10px;
 }
 
@@ -33,12 +34,6 @@
 
 .add-block-card > h4, p {
     margin: 2px;
-}
-
-.app-block {
-    display: flex;
-    flex-direction: column;
-    position: relative;
 }
 
 .app-block-options {
@@ -74,4 +69,9 @@
 
 .app-block-options:hover {
     opacity: 1;
+}
+
+.dragged-app-block {
+    opacity: 0.5;
+    z-index: 1;
 }

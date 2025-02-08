@@ -1,3 +1,9 @@
+.app-block {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
 .app-page-editable .app-block-inner {
     transition: background-color 0.5s;
     border-radius: 10px;
@@ -7,10 +13,25 @@
     background-color: #eee;
 }
 
-.app-page-editable .app-block-inner {
-    padding: 20px;
+.app-block-inner {
+    padding: 10px;
 }
 
-.app-page-editable .app-block-inner .app-block-text-textarea {
+.app-block-text-textarea, .app-block-header-textarea {
     outline: none;
+}
+
+.app-block-text-textarea:empty::before {
+    content: "Text...";
+    color: #777;
+}
+
+.app-block-header-textarea:empty::before {
+    content: "Heading...";
+    color: #777;
+}
+
+.app-block-header-textarea {
+    font-size: large;
+    font-weight: bold;
 }

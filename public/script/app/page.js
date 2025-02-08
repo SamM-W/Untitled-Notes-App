@@ -11,24 +11,12 @@
 var pageElement = document.getElementById("app_blocks");
 var currentPage = {
     blocks: [
-        {
-            blockId: "5aca6fb9-1134-437a-b3f2-df8ae87f27ec",
-            type: "text",
-            typeContent: {
-                text: "HI 5aca6fb9-1134-437a-b3f2-df8ae87f27ec"
-            }
-        },
-        {
-            blockId: "8ba7ebca-5cbe-41a0-ae00-888945561bb1",
-            type: "text",
-            typeContent: {
-                text: "HI 8ba7ebca-5cbe-41a0-ae00-888945561bb1"
-            }
-        }
     ]
 }
 
-var pageChanged = false
+var emptyPageHintPresent = true;
+
+var pageChanged = false;
 function notifyPageChanged() {
     pageChanged = true;
 }
@@ -49,12 +37,33 @@ function buildBlock(data) {
     block.appendChild(blockOptions);
 
     addDraggerFunction(block, data);
-    addAddBlockFunction(block, data);
+    addAddBlockFunction(block, ()=>(currentPage.blocks.indexOf(data) + 1));
 
     return block;
 }
 
+function createEmptyPageHint() {
+    var hintBlock = document.createElement("div");
+    hintBlock.classList.add("app-block");
+
+    var blockInner = document.createElement("div");
+    blockInner.classList.add("app-block-inner");
+    blockInner.innerText = "Looks like the page is empty, click the + below to get started!";
+    hintBlock.appendChild(blockInner);
+
+    var blockOptions = document.createElement("div");
+    blockOptions.classList.add("app-block-options");
+    blockOptions.innerHTML = `<div class="app-block-add app-block-add-to-empty">+</div>`;
+    hintBlock.appendChild(blockOptions);
+    addAddBlockFunction(hintBlock, ()=>0);
+
+    pageElement.appendChild(hintBlock);
+}
+
 function rebuildContents() {
+    if (emptyPageHintPresent) {
+        createEmptyPageHint();
+    }
     for (var block of currentPage.blocks) {
         if (block.element) block.element.remove();
         block.element = buildBlock(block);
@@ -71,8 +80,7 @@ function moveBlock(from, to) {
     if (to == pageElement.children.length) {
         pageElement.appendChild(fromElement);
     } else {
-        var toElement = currentPage.blocks[to].element;
-        console.log(fromElement);
+        var toElement = pageElement.children[to];
         pageElement.insertBefore(fromElement, toElement);
     }
 
@@ -80,11 +88,21 @@ function moveBlock(from, to) {
     currentPage.blocks.splice(to, 0, movedElement);
 }
 
+function insertNewBlockByUser(to, type) {
+    var block = insertNewBlock(to, type);
+    onUserCreateBlock(block);
+}
+
 function insertNewBlock(to, type) {
+    if (emptyPageHintPresent) {
+        pageElement.children[0].remove();
+        emptyPageHintPresent = false;
+    }
+
     var newBlock = {
         blockId: crypto.randomUUID(),
         type: type,
-        typeContent : {}
+        typeContent: {}
     };
     newBlock.element = buildBlock(newBlock);
     if (to == pageElement.children) {
@@ -93,6 +111,19 @@ function insertNewBlock(to, type) {
         pageElement.insertBefore(newBlock.element, pageElement.children[to]);
     }
     currentPage.blocks.splice(to, 0, newBlock);
+    return newBlock;
+}
+
+function removeBlock(data) {
+    var index = currentPage.blocks.indexOf(data);
+
+    data.element.remove();
+    currentPage.blocks.splice(index, 1);
+
+    if (currentPage.blocks.length == 0) {
+        createEmptyPageHint();
+        emptyPageHintPresent = true;
+    }
 }
 
 addEventListener("load", () => {

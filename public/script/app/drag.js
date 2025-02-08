@@ -10,6 +10,7 @@ function addDraggerFunction(blockElement, blockData) {
         startDraggingPosY = event.clientY;
         draggingTargetIndex = currentPage.blocks.indexOf(blockData);
         draggingElement = blockElement;
+        draggingElement.classList.add("dragged-app-block");
     })
 }
 
@@ -29,22 +30,26 @@ document.addEventListener("mouseup", (event) => {
     draggingTargetIndex = undefined;
 });
 
+function getYCenter(rect) {
+    return rect.top + rect.height/2;
+}
+
 function placeDraggingElement(element) {
-    var placedY = element.getBoundingClientRect().top;
+    var placedY = getYCenter(element.getBoundingClientRect());
 
     var indexToPlaceAt = 0;
     var currentBlock = currentPage.blocks[draggingTargetIndex];
 
     for (var block of currentPage.blocks) {
         if (block == currentBlock) continue;
-
-        var y = block.element.getBoundingClientRect().top;
         
+        var y = getYCenter(block.element.getBoundingClientRect());   
         if (placedY < y) break;
         indexToPlaceAt++;
     }
 
     moveBlock(draggingTargetIndex, indexToPlaceAt);
 
+    element.classList.remove("dragged-app-block");
     element.style.top = 0;
 }
