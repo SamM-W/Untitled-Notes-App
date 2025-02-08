@@ -1,5 +1,5 @@
 import express from "express";
-import { useStaticTemplates } from "./partialTemplates.js";
+import { useStaticCompiles } from "./partialTemplates.js";
 import { handleAPIRequest } from "./api.js";
 
 console.log("Starting web...");
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
     }
     next();
 })
-useStaticTemplates(app);
+useStaticCompiles(app);
 app.use(express.static('public', {
     setHeaders: (res) => {
         res.set("Referrer-Policy", "no-referrer-when-downgrade");

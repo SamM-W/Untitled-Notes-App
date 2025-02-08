@@ -1,0 +1,77 @@
+.add-block-float {
+    display: block;
+    position: absolute;
+    border: #efefef 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.add-block-card-container {
+    display: flex;
+    max-width: 70vw;
+    overflow-y: auto;
+    border-radius: 5px;
+}
+
+.add-block-card {
+    margin-right: 10px;
+    display: inline-block;
+    width: 150px;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f6f6f6;
+    border: #f6f6f6 2px solid;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: border 0.2s ease, background-color 0.2s ease;
+}
+
+.add-block-card:hover {
+    border: #f2f2f2 2px solid;
+    background-color: #fefefe;
+}
+
+.add-block-card > h4, p {
+    margin: 2px;
+}
+
+.app-block {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.app-block-options {
+    display: none;
+}
+
+.app-block-inner {
+    flex-basis: 100%;
+}
+
+.app-block-options > * {
+    background-color: #eee;
+    color: #444;
+    text-align: center;
+    padding: 0 5px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.app-page-editable .app-block-options {
+    display: flex;
+    padding: 1px 10px;
+    flex-direction: row;
+    justify-content: baseline;
+    opacity: 0;
+    transition: opacity 0.2s;
+    cursor: pointer;
+}
+
+.app-block-drag {
+    cursor: grab;
+}
+
+.app-block-options:hover {
+    opacity: 1;
+}

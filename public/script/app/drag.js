@@ -1,51 +1,50 @@
-var draggingIndex = 0;
-var draggingElement = undefined;
-var startDraggingPos = undefined;
+var draggingTargetIndex;
+var draggingElement;
+var startDraggingPosY;
 
-for (var i = 0; i < currentPage.blocks.length; i++) {
-    const currentPageIndex = i;
-    const block = currentPage.blocks[i];
-    const element = block.element;
-    const dragTarget = element.getElementsByClassName("app-block-drag")[0];
-    dragTarget.addEventListener("mousedown", (e) => {
-        e.preventDefault();
-        startDraggingPos = [e.clientX, e.clientY];
-        element.style.position = "relative";
-        draggingIndex = currentPageIndex;
-        draggingElement = element;
+function addDraggerFunction(blockElement, blockData) {
+    const dragTarget = blockElement.getElementsByClassName("app-block-drag")[0];
+    
+    dragTarget.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        startDraggingPosY = event.clientY;
+        draggingTargetIndex = currentPage.blocks.indexOf(blockData);
+        draggingElement = blockElement;
     })
 }
 
-document.addEventListener("mousemove", (e) => {
+document.addEventListener("mousemove", (event) => {
     if (draggingElement == undefined) return;
-    var newOffset = [e.clientX - startDraggingPos[0], e.clientY - startDraggingPos[1]]
-    draggingElement.style.top = newOffset[1] + "px";
+
+    draggingElement.style.top = (event.clientY - startDraggingPosY) + "px";
 });
 
-document.addEventListener("mouseup", (e) => {
+document.addEventListener("mouseup", (event) => {
     if (draggingElement == undefined) return;
-    e.preventDefault();
+    event.preventDefault();
+
     placeDraggingElement(draggingElement);
+
     draggingElement = undefined;
+    draggingTargetIndex = undefined;
 });
 
 function placeDraggingElement(element) {
     var placedY = element.getBoundingClientRect().top;
-    console.log(placedY);
-    var indexToPlaceAt = 0;
 
-    var currentBlock = currentPage.blocks.splice(draggingIndex, 1);
+    var indexToPlaceAt = 0;
+    var currentBlock = currentPage.blocks[draggingTargetIndex];
 
     for (var block of currentPage.blocks) {
+        if (block == currentBlock) continue;
+
         var y = block.element.getBoundingClientRect().top;
-        console.log(placedY, y);
+        
         if (placedY < y) break;
         indexToPlaceAt++;
     }
 
-    currentPage.blocks.splice(indexToPlaceAt, 0, currentBlock[0]);
-    rebuildPage();
+    moveBlock(draggingTargetIndex, indexToPlaceAt);
 
-    element.style.left = "0";
-    element.style.top = "0";
+    element.style.top = 0;
 }

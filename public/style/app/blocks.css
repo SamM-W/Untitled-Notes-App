@@ -14,38 +14,3 @@
 .app-page-editable .app-block-inner .app-block-text-textarea {
     outline: none;
 }
-
-.app-block {
-    display: flex;
-    flex-direction: column;
-}
-
-.app-block-options {
-    display: none;
-}
-
-.app-block-inner {
-    flex-basis: 100%;
-}
-
-.app-block-options > * {
-    background-color: #eee;
-    color: #444;
-    text-align: center;
-    padding: 0 5px;
-    border-radius: 5px;
-    cursor: grab;
-    margin-right: 20px;
-}
-.app-page-editable .app-block-options {
-    display: flex;
-    padding: 1px 10px;
-    flex-direction: row;
-    justify-content: baseline;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-
-.app-block-options:hover {
-    opacity: 1;
-}

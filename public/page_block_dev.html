@@ -3,6 +3,7 @@
 <head>
     ${HEAD}
     <link rel="stylesheet" href="style/app/blocks.css"/>
+    <link rel="stylesheet" href="style/app/app.css"/>
 </head>
 <body>
     ${API_ACCESS}
@@ -10,36 +11,17 @@
     ${NAVBAR}
     <page>
         <div id="app_blocks" class="app-page app-page-editable">
-            <div class="app-block" id="test-text-block-1">
-                <div class="app-block-inner">
-                    <div class="app-block-text-textarea" contenteditable>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam mi, condimentum ac sapien a, dignissim hendrerit tellus. Mauris eu blandit elit. Proin ut odio at justo finibus semper in at purus. Proin finibus blandit ultricies. Integer consequat, tellus sit amet venenatis rutrum, dolor mauris tincidunt lacus, et congue lorem justo id odio. Proin dictum gravida porta. Ut non leo lacinia, accumsan libero ut, vehicula ex. Praesent tristique magna sapien, eget vulputate arcu euismod quis. Ut feugiat eleifend commodo. Ut ac elit arcu. Ut malesuada condimentum rhoncus. Quisque vel venenatis eros. Pellentesque dui risus, tincidunt eget felis at, interdum finibus lectus. Suspendisse laoreet vulputate quam id aliquam. Sed vel mi mi.
-                        Curabitur sodales molestie nibh, vitae volutpat urna pulvinar a. Nulla quis varius tortor. Cras libero tellus, maximus porta tempus vel, commodo facilisis libero. Etiam eleifend tortor ex, eu porttitor mi posuere eu. Etiam non risus lectus. Sed vel tortor dolor. Integer pretium, turpis id pellentesque blandit, est mi congue orci, et varius dolor leo id turpis. Morbi feugiat, turpis id dapibus faucibus, ipsum lorem gravida velit, sed vehicula sapien neque non quam. Donec mattis odio erat, sed vulputate augue cursus eget. Mauris aliquet tellus id nunc egestas ultricies. Nam.
-                    </div>
-                </div>
-                <div class="app-block-options">
-                    <div class="app-block-drag">⋯</div>
-                    <div class="app-block-add">+</div>
-                </div>
-            </div>
-
-            <div class="app-block" id="test-text-block-2">
-                <div class="app-block-inner">
-                    <div class="app-block-text-textarea" contenteditable>
-                        BLOCK 2 HIHI    
-                    </div>
-                </div>
-                <div class="app-block-options">
-                    <div class="app-block-drag">⋯</div>
-                    <div class="app-block-add">+</div>
-                </div>
-            </div>
+        </div>
+        <div id="add_block_float" class="add-block-float" style="display: none;">
+            <p>Add a block</p>
+            <div id="add_block_list" class="add-block-card-container"></div>
         </div>
     </page>
     ${TOOLTIPS}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
-    <script src="script/app/builder.js"></script>
-    <script src="script/app/page.js"></script>
     <script src="script/app/drag.js"></script>
+    <script src="script/app/add.js"></script>
+    <script src="script/app/blocks.compile.js"></script>
+    <script src="script/app/page.js"></script>
 </body>
 </html>
