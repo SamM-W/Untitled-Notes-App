@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    ${HEAD}
+    <style>
+        page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .center-signin {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            flex-direction: column;
+        }
+        .google-signin-spacer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    ${API_ACCESS}
+    <script src="script/get_auth.js"></script>
+    <page>
+        <script src="https://accounts.google.com/gsi/client" async></script>
+        <div class="center-signin">
+            <h1 id="missing_auth_redirect_header" style="display: none;">Sign in or create account before using Notes App!</h1>
+            <h2 id="initial_header">Sign in or create account</h2>
+            <script src="script/get_auth_message.js"></script>
+            <br/>
+            <div class="google-signin-spacer">
+                <div id="g_id_onload"
+                    data-client_id="72817083579-kd1gu053ehj8os6snedmut08i4dgl6md.apps.googleusercontent.com"
+                    data-context="signin"
+                    data-ux_mode="popup"
+                    data-callback="onGoogleSignIn"
+                    data-auto_prompt="false">
+                </div>
+
+                <div class="g_id_signin"
+                    data-type="standard"
+                    data-shape="rectangular"
+                    data-theme="outline"
+                    data-text="signin_with"
+                    data-size="large"
+                    data-logo_alignment="center"
+                    data-width="250">
+                </div>
+            </div>
+        </div>
+    </page>
+</body>
+</html>

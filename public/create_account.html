@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    ${HEAD}
+    <link rel="stylesheet" href="style/create_account.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css"/>
+</head>
+<body>
+    ${API_ACCESS}
+    ${TOOLTIPS}
+    <page>
+        <div class="center-account">
+            <h2>Make account</h2>
+            <div class="account-input-container">
+                <div class="input-group">
+                    <p>Google account</p>
+                    <div id="account_google_display">
+                        <div class="account-info-display">
+                            <div class="account-info-image"><img id="account_info_image" src="https://lh3.googleusercontent.com/ogw/AF2bZyh9z_622xqRG2ZX9VlMoJ6mMWIPL09Lb_D7P2IXbwUgc-VV=s32-c-mo"/></div>
+                            <div class="account-info-text"><span class="account-info-name" id="account_info_name">Account Name</span><span class="account-info-email" id="account_info_email">examplepersonemail@gmail.com</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <p>Display name</p>
+                    <input id="account_name_box" type="text" onchange="checkInputValidity()"/>
+                </div>
+            </div>
+            <button onclick="submitButtonClicked()" class="action-button">Create!</button>
+            <p id="account_input_failed_reason"></p>
+        </div>
+    </page>
+    <script src="script/create_account.js"></script>
+</body>
+</html>

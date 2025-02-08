@@ -1,0 +1,101 @@
+<div class="sidenav">
+    <!-- <button class="sidenav-expander" onclick='navbarExpand(this)'>>>></button> -->
+     
+    <div class="sidenav-top">
+        <a href="#home">LOGO</a>
+        <a href="/">Home</a>
+        <a href="/page_block_dev">Page dev</a>
+        <a href="#idk">...</a>        
+    </div>
+    
+    <div class="sidenav-bottom">  
+        <div class="sidenav-user-profile">
+            <div>
+                <img id="sidenav_user_profile_image" src=""/>
+            </div>
+            <div class="sidenav-user-profile-text">
+                <span class="sidenav-user-profile-name" id="sidenav_user_profile_name">Account Name</span>
+                <a href = "#" onclick="navbarLogOut()" class="mini-nav-option">Sign out</a>  
+            </div>
+        </div>
+        
+    </div>
+</div>
+<script>
+    function navbarLogOut() {
+        callAuthorisedApi("/api/invalidate_current_token", {})
+            .then((data) => {
+                console.log("Sign out request", data);
+                sessionStorage.removeItem("session_user_data");
+                document.cookie = "authToken=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+                sessionStorage.setItem("redirect_from_missing_auth", true);
+                window.location.href = "/get_auth";
+            })
+    }
+
+    getCurrentUserInfo((data) => {
+        document.getElementById("sidenav_user_profile_image").src = data.ProfilePicture;
+        document.getElementById("sidenav_user_profile_name").innerText = data.Name;
+    });
+</script>
+<style>
+    body {
+        display: flex;
+    }
+
+    .sidenav {
+        display: flex;
+        justify-content: space-between;
+        height: 100vh;
+        padding: 5px;
+        box-sizing: border-box;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        background-color: rgb(246, 246, 246);
+    }
+    
+    .sidenav > * {
+        width: 50px;
+        display: flex;
+        flex-direction: column;
+        transition: width 0.5s;
+    }
+
+    .sidenav:hover > * {
+        width: 200px;
+    }
+
+    .sidenav-user-profile {
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sidenav-user-profile > .sidenav-user-profile-text {
+        padding-left: 10px;
+        display: flex;
+        width: 200px;
+        height: min-content;
+    }
+    
+    .sidenav-user-profile > span {
+        padding-left: 10px;
+        display: flex;
+        min-width: 125px;
+        height: min-content;
+    }
+    .sidenav-user-profile > div {
+        height: 50px;
+    }
+    .sidenav-user-profile > div > img {
+        border-radius: 25%;
+        width: 50px;
+    }
+
+    .mini-nav-option {
+        font-size: small;
+        width: 50px;
+    }
+</style>

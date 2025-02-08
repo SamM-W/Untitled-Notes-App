@@ -1,0 +1,99 @@
+page *, .sidenav * {
+    font-family: monospace, Arial, Helvetica, sans-serif;
+    color: rgb(46, 46, 52);
+}
+
+body {
+    margin: 0;
+    font-family: monospace, Arial, Helvetica, sans-serif;
+    color: rgb(46, 46, 52);
+}
+
+page {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+button {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    border: 2px solid #eee;
+    transition: background-color 0.2s, border 0.2s;
+}
+
+button:hover {
+    background-color: #fff;
+    border: 2px solid #aaa;
+}
+
+.action-button {
+    color: white;
+    background-color: #2e97ff;
+}
+
+.action-button:hover {
+    color: #015cb7;
+    background-color: #fff;
+}
+
+.account-info-display {
+    border-radius: 10px;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    padding: 10px;
+    width: 250px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.account-info-text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    justify-content: space-evenly;
+}
+
+.account-info-email {
+    font-size: small;
+    color: #aaa;
+}
+
+.account-info-image > img {
+    border-radius: 25%;
+    width: 40px;
+    display: block;
+}
+
+input {
+    width: 250px;
+    border-radius: 10px;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    padding: 10px;
+}
+
+.invalid-input-value {
+    border: 1px red solid;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+page {
+    display: block;
+    min-height: 100vh;
+    box-sizing: border-box;
+}

@@ -1,0 +1,19 @@
+.center-account {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+.account-input-container {
+    width: 500px;
+    margin-bottom: 10px;
+}
+page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+page {
+    padding: 0;
+}
