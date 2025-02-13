@@ -21,6 +21,7 @@
         
     </div>
 </div>
+<div class="sidenav-spacer"></div>
 <script>
     function navbarLogOut() {
         callAuthorisedApi("/api/invalidate_current_token", {})
@@ -44,15 +45,24 @@
     }
 
     .sidenav {
+        position: fixed;
         display: flex;
         justify-content: space-between;
-        height: 100vh;
+        height: 100%;
         padding: 5px;
         box-sizing: border-box;
         flex-direction: column;
         justify-content: space-between;
         flex-wrap: wrap;
         background-color: rgb(246, 246, 246);
+        z-index: 1;
+    }
+
+    .sidenav-spacer {
+        width: 50px;
+        min-width: 50px;
+        padding: 5px;
+        display: block;
     }
     
     .sidenav > * {
@@ -86,12 +96,18 @@
         min-width: 125px;
         height: min-content;
     }
+
     .sidenav-user-profile > div {
         height: 50px;
     }
+
     .sidenav-user-profile > div > img {
         border-radius: 25%;
         width: 50px;
+    }
+
+    .sidenav-user-profile-text > * {
+        padding: 5px;
     }
 
     .mini-nav-option {
