@@ -14,22 +14,13 @@ function promisedGet(query, params) {
     });
 }
 
-function getUserOfGsub(gsub) {
-    return promisedGet("SELECT * FROM users WHERE Gsub = ?", [gsub])
-}
-
-function getUserOfId(userId) {
-    return promisedGet("SELECT * FROM users WHERE Id = ?", [userId])
-}
-
-function createUser(name, email, picture, gsub) {
-    needsCommitToFile = true;
-    return promisedGet("INSERT INTO users (Id, Name, Email, ProfilePicture, Gsub) VALUES (NULL, ?, ?, ?, ?)", [name, email, picture, gsub]);
-}
-
-function getLastInsertedRowId() {
-    needsCommitToFile = true;
-    return promisedGet("SELECT last_insert_rowid() as id", [])
+function promisedAll(query, params) {
+    return new Promise((accept, reject) => {
+        database.all(query, params, (err, data) => {
+            if (err) reject(err)
+            else accept(data)
+        })
+    });
 }
 
 setInterval(() => {
@@ -40,6 +31,11 @@ setInterval(() => {
     }
 }, 2000);
 
+function getLastInsertedRowId() {
+    needsCommitToFile = true;
+    return promisedGet("SELECT last_insert_rowid() as id", [])
+}
+
 export default {
-    getUserOfGsub, getUserOfId, createUser, getLastInsertedRowId
+    getLastInsertedRowId, promisedGet, promisedAll
 }

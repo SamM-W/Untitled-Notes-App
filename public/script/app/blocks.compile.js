@@ -11,9 +11,9 @@ function handleGenericTextBox(className, data) {
     const textArea = document.createElement("div");
     textArea.contentEditable = "true";
     textArea.classList.add(className);
-    textArea.innerText = data.typeContent.text ? data.typeContent.text : "";
+    textArea.innerText = data.block_data.text_content ? data.block_data.text_content : "";
     textArea.addEventListener("input", (e) => {
-        data.typeContent.text = textArea.innerText;
+        data.block_data.text_content = textArea.innerText;
         notifyPageChanged();
     });
     textArea.addEventListener("keydown", (e) => {
@@ -44,6 +44,14 @@ function focusNewTextbox(element) {
 
     selection.removeAllRanges();
     selection.addRange(range);
+}
+
+function templateButton(text, className, onClicked) {
+    var editButon = document.createElement("button");
+    editButon.classList.add(className);
+    editButon.innerText = text;
+    editButon.addEventListener("click", onClicked);
+    return editButon;
 }
 
 //Use code from the whole directory using the compile system, helps to break down large defs

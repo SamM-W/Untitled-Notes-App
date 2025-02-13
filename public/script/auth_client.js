@@ -23,10 +23,10 @@ if (!isLoggedIn) {
             .then((data) => {
                 console.log("Fetched user info", data)
                 window.currentUser = data.userData;
+                sessionStorage.setItem("session_user_data", JSON.stringify(data.userData));
                 for (var callback of window.currentUserConsumers) {
                     callback(window.currentUser);
                 }
-                sessionStorage.setItem("session_user_data", JSON.stringify(data.userData));
             })
             .catch((error) => {
                 console.log("Failed to get user data", error);

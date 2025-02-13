@@ -6,15 +6,16 @@
 
 .app-page-editable .app-block-inner {
     transition: background-color 0.5s;
+    border: 2px solid #fff0;
     border-radius: 10px;
 }
 
 .app-page-editable .app-block-inner:hover {
-    background-color: #eee;
+    border: 2px solid #eee;
 }
 
 .app-block-inner {
-    padding: 10px;
+    padding: 5px;
 }
 
 .app-block-text-textarea, .app-block-header-textarea {
@@ -31,7 +32,50 @@
     color: #777;
 }
 
+.app-block-flashcards-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.app-block-flashcards-info h4 {
+    margin: 0;
+}
+
+.app-block-flashcards-progress-group {
+    display: inline-block;
+    color: var(--progress-group-color);
+    margin-right: 10px;
+}
+
+.app-block-flashcards-progress-group::after {
+    content: '';
+    display: inline-block;
+    margin-left: 2.5px;;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--progress-group-color);
+}
+
+/* TODO: nicer colours */
+/* .app-block-flashcards-option-study {
+    background-color: #2196F3;
+    border: #1976D2 2px solid;
+    color: #fff;
+}
+
+.app-block-flashcards-option-study:hover {
+    background-color: #64B5F6;
+    border: #1565C0 2px solid;
+    color: #fff;
+} */
+
 .app-block-header-textarea {
-    font-size: large;
+    font-size: 25px;
     font-weight: bold;
+}
+
+[text-input-hint]:empty::before {
+    content: attr(text-input-hint);
+    color: #777;
 }

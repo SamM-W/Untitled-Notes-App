@@ -1,6 +1,7 @@
 var addBlockFloat = document.getElementById("add_block_float");
 
 var isAddBlockActive = false;
+var isListeningForClickOff = false;
 var addBlockTargetIndex = undefined;
 
 function addAddBlockFunction(blockElement, targetIndexGetter) {
@@ -22,3 +23,15 @@ function addBlockCardClicked(type) {
     addBlockTargetIndex = undefined;
     isAddBlockActive = false;
 }
+
+addEventListener("mousedown", (event) => {
+    if (!isAddBlockActive) return;
+    if (isListeningForClickOff  && !addBlockFloat.contains(event.target)) {
+        addBlockFloat.style.display = "none";
+        addBlockTargetIndex = undefined;
+        isAddBlockActive = false;
+        isListeningForClickOff = false;
+    } else {    
+        isListeningForClickOff = true;   
+    }
+});

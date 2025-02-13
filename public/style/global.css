@@ -29,6 +29,7 @@ button {
     background-color: #f9f9f9;
     border: 2px solid #eee;
     transition: background-color 0.2s, border 0.2s;
+    margin: 0px 5px;
 }
 
 button:hover {
@@ -96,4 +97,24 @@ page {
     display: block;
     min-height: 100vh;
     box-sizing: border-box;
+}
+
+.label-input {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    outline: none;
+    border-radius: 0;
+    border-bottom: 2px solid #aaa0;
+    transition: border 0.2s ease;
+    width: fit-content;
+    min-width: 250px;
+}
+
+.label-input:hover {
+    border-bottom: 2px solid #e1e1e1;
+}
+
+.label-input:focus {
+    border-bottom: 2px solid #aaa;
 }

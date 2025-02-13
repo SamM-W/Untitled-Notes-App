@@ -48,12 +48,14 @@ function createEmptyPageHint() {
 
     var blockInner = document.createElement("div");
     blockInner.classList.add("app-block-inner");
+    blockInner.id = "empty_hint_block_inner";
     blockInner.innerText = "Looks like the page is empty, click the + below to get started!";
     hintBlock.appendChild(blockInner);
 
     var blockOptions = document.createElement("div");
+    blockOptions.id = "empty_hint_block_options";
     blockOptions.classList.add("app-block-options");
-    blockOptions.innerHTML = `<div class="app-block-add app-block-add-to-empty">+</div>`;
+    blockOptions.innerHTML = `<div id="empty_hint_add_button" class="app-block-add">+</div>`;
     hintBlock.appendChild(blockOptions);
     addAddBlockFunction(hintBlock, ()=>0);
 
@@ -61,7 +63,7 @@ function createEmptyPageHint() {
 }
 
 function rebuildContents() {
-    if (emptyPageHintPresent) {
+    if (currentPage.blocks.length == 0) {
         createEmptyPageHint();
     }
     for (var block of currentPage.blocks) {
@@ -94,15 +96,14 @@ function insertNewBlockByUser(to, type) {
 }
 
 function insertNewBlock(to, type) {
-    if (emptyPageHintPresent) {
+    if (currentPage.blocks.length == 0) {
         pageElement.children[0].remove();
-        emptyPageHintPresent = false;
     }
 
     var newBlock = {
-        blockId: crypto.randomUUID(),
+        block_id: undefined,
         type: type,
-        typeContent: {}
+        block_data: {}
     };
     newBlock.element = buildBlock(newBlock);
     if (to == pageElement.children) {
@@ -122,10 +123,29 @@ function removeBlock(data) {
 
     if (currentPage.blocks.length == 0) {
         createEmptyPageHint();
-        emptyPageHintPresent = true;
     }
 }
 
 addEventListener("load", () => {
-    rebuildContents();
-})
+    var currentPageId = 1;
+
+    callAuthorisedApi("/api/get_page", { pageId: currentPageId })
+        .then((response) => {
+            console.log("Recived page data", response.content);
+            document.getElementById("page_name").innerText = response.content.name;
+            document.getElementById("page_owner").innerText = response.content.owner_name;
+            currentPage = response.content;
+            rebuildContents();
+        });
+
+    var pageSocket = new WebSocket(`ws://localhost:8080/api/ws/page?page_id=${currentPageId}`);
+    pageSocket.addEventListener("open", (e) => {
+        console.log("Opened page edit socket");
+    });
+    pageSocket.addEventListener("close", (e) => {
+        console.log("Closed page edit socket", e);
+    });
+    pageSocket.addEventListener("message", (e) => {
+        console.log("Recived message on page edit socket", e);
+    });
+});

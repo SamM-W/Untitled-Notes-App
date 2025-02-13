@@ -1,7 +1,8 @@
-import { addAuthorisedHandler, addHandler, assertFieldFormat } from "../api.js";
-import database from "../../backend/database.js";
-import { getGoogleTokenVerify } from "../../backend/google-auth.js";
-import { invalidateToken, issueNewToken } from "../../backend/authentication.js";
+import { addAuthorisedHandler, addHandler, assertFieldFormat } from "./rest_api.js";
+import database from "../../../backend/database.js";
+import { getGoogleTokenVerify } from "../../../backend/google-auth.js";
+import { invalidateToken, issueNewToken } from "../../../backend/authentication.js";
+import { createUser, getUserOfGsub, getUserOfId } from "../../../backend/interface/user_database.js";
 
 export function buildUserApi(){
     addHandler("user_exists", async function (req) {
@@ -11,7 +12,7 @@ export function buildUserApi(){
         );
         if (failedAssertionResponse) return failedAssertionResponse;
 
-        var existingUser = await database.getUserOfGsub(req.body.gsub);
+        var existingUser = await getUserOfGsub(req.body.gsub);
         
         return {
             status: "success",
@@ -41,7 +42,7 @@ export function buildUserApi(){
         );
         if (failedAssertionResponse) return failedAssertionResponse;
 
-        var existingUser = await database.getUserOfGsub(googleVerify.sub);
+        var existingUser = await getUserOfGsub(googleVerify.sub);
         if (existingUser) {
             return {
                 status: "error",
@@ -52,7 +53,7 @@ export function buildUserApi(){
 
         console.log("Creating user:", userData);
 
-        database.createUser(userData.name, userData.email, userData.picture, userData.gsub);
+        createUser(userData.name, userData.email, userData.picture, userData.gsub);
         var newUserId = (await database.getLastInsertedRowId()).id;
 
         console.log("Created new user! ID:", newUserId);
@@ -75,7 +76,7 @@ export function buildUserApi(){
             };
         }
 
-        var existingUser = await database.getUserOfGsub(googleVerify.sub);
+        var existingUser = await getUserOfGsub(googleVerify.sub);
         if (!existingUser) {
             return {
                 status: "error",
@@ -87,7 +88,7 @@ export function buildUserApi(){
         return {
             status: "success",
             message: "user signed in successfully",
-            token: issueNewToken(existingUser.Id),
+            token: issueNewToken(existingUser.id),
         };
     });
 
@@ -103,7 +104,7 @@ export function buildUserApi(){
         return {
             status: "success",
             message: "fetched user data successfully",
-            userData: await database.getUserOfId(userId)
+            userData: await getUserOfId(userId)
         }
     })
 };

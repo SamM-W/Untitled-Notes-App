@@ -1,9 +1,12 @@
-import { getUserIdOfToken } from "../backend/authentication.js";
-import { buildUserApi } from "./endpoints/user_api.js";
+import { getUserIdOfToken } from "../../../backend/authentication.js";
+import { buildPageApi } from "./page_api.js";
+import { buildUserApi } from "./user_api.js";
 
 const tokenOfCookieString = /authToken=([^;]+)/;
-function getTokenOfCookie(req) {
-    var match = req.get("cookie").match(tokenOfCookieString);
+export function getTokenOfRequestCookie(req) {
+    var cookie = req.get("cookie");
+    if (!cookie) return null
+    var match = cookie.match(tokenOfCookieString);
     if (!match) return null;
     var token = match[1].trim();
     if (!token) return null;
@@ -12,13 +15,13 @@ function getTokenOfCookie(req) {
 
 export function addAuthorisedHandler(path, handler) {
     API_HANDLERS[path] = async function (req) {
-        var token = getTokenOfCookie(req);
+        var token = getTokenOfRequestCookie(req);
         var userId = getUserIdOfToken(token);
 
         if (!userId) {
             return {
                 status: "error",
-                message: `invalid token ${getTokenOfCookie(req)}`,
+                message: `invalid token ${getTokenOfRequestCookie(req)}`,
                 non_fatal_error_id: "invalid_token",
             };
         }
@@ -66,7 +69,7 @@ addHandler("ping", function (req) {
     };
 });
 
-export async function handleAPIRequest(target, req) {
+export async function handleRestAPIRequest(target, req) {
     if (API_HANDLERS[target]) {
         return await API_HANDLERS[target](req);
     }
@@ -78,3 +81,4 @@ export async function handleAPIRequest(target, req) {
 }
 
 buildUserApi();
+buildPageApi();

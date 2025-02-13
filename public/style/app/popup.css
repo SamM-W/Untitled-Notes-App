@@ -1,0 +1,97 @@
+.app-popup-container {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.app-popup {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    height: 90vh;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 2px solid #afafaf;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.app-popup-topbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 40px
+}
+
+.app-popup-topbar::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 85vw;
+    height: 2px;
+    margin-top: 45px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #efefef;
+    border-radius: 1px;
+}
+
+.app-popup-topbar button {
+    margin: 0;
+}
+
+.app-popup-content {
+    margin-top: 10px;
+    height: calc(80vh - 10px);
+    overflow: auto;
+}
+
+.popup-flashcards-deck-header {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.popup-flashcards-open-study:hover {
+    border: 2px solid rgb(52, 126, 255);
+}
+
+.popup-flashcards-deck-title {
+    border: 1px solid #fff;
+    outline: none;
+}
+
+.popup-flashcards-deck-title:focus {
+    border-bottom: 1px solid #aaa;
+}
+
+.popup-flashcards-flashcard-sides {
+    display: flex;
+}
+
+.popup-flashcards-flashcard-side {
+    display: flex;
+    margin: 20px;
+    flex-grow: 1;
+    background-color: #f1f1f1;
+    border: 2px solid #d2d2d2;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.popup-flashcards-flashcard-text {
+    text-align: center;
+}
+
+.popup-flashcards-add-new-card {
+    padding: 0 20px;
+}

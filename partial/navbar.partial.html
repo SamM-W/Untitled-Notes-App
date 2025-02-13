@@ -34,8 +34,8 @@
     }
 
     getCurrentUserInfo((data) => {
-        document.getElementById("sidenav_user_profile_image").src = data.ProfilePicture;
-        document.getElementById("sidenav_user_profile_name").innerText = data.Name;
+        document.getElementById("sidenav_user_profile_image").src = data.profile_picture;
+        document.getElementById("sidenav_user_profile_name").innerText = data.name;
     });
 </script>
 <style>
