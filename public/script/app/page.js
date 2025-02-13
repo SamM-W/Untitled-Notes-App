@@ -9,22 +9,15 @@
 // }
 
 var pageElement = document.getElementById("app_blocks");
+
 var currentPage = {
     blocks: [
     ]
 }
 
-var emptyPageHintPresent = true;
-
-var pageChanged = false;
-function notifyPageChanged() {
-    pageChanged = true;
-}
-
 function buildBlock(data) {
     var block = document.createElement("div");
     block.classList.add("app-block");
-    block.id = "block-" + data.blockId;
 
     var blockInner = document.createElement("div");
     blockInner.classList.add("app-block-inner");
@@ -66,16 +59,24 @@ function rebuildContents() {
     if (currentPage.blocks.length == 0) {
         createEmptyPageHint();
     }
+    while (pageElement.firstChild) {
+        pageElement.firstChild.remove();
+    }
     for (var block of currentPage.blocks) {
-        if (block.element) block.element.remove();
         block.element = buildBlock(block);
         pageElement.appendChild(block.element);
     }
 }
 
+function moveBlockAndNotify(from, to) {
+    moveBlock(from, to);
+    notifyMovedBlock(currentPage.blocks[to].id, to);
+}
+
 function moveBlock(from, to) {
     if (from == to) return;
-
+    console.log(from, to);
+    
     var fromElement = currentPage.blocks[from].element;
     pageElement.removeChild(fromElement);
 
@@ -90,21 +91,27 @@ function moveBlock(from, to) {
     currentPage.blocks.splice(to, 0, movedElement);
 }
 
-function insertNewBlockByUser(to, type) {
-    var block = insertNewBlock(to, type);
+async function insertNewBlockByUser(to, type) {
+    var block = await insertNewBlock(to, type);
     onUserCreateBlock(block);
 }
 
-function insertNewBlock(to, type) {
+async function insertNewBlock(to, type) {
     if (currentPage.blocks.length == 0) {
         pageElement.children[0].remove();
     }
 
     var newBlock = {
-        block_id: undefined,
+        id: await getNextBlockId(),
         type: type,
         block_data: {}
     };
+    sendNewBlockToServer(to, newBlock);
+    insertNewBlockData(to, newBlock);
+    return newBlock;
+}
+
+function insertNewBlockData(to, newBlock) {
     newBlock.element = buildBlock(newBlock);
     if (to == pageElement.children) {
         pageElement.appendChild(newBlock.element);
@@ -112,11 +119,26 @@ function insertNewBlock(to, type) {
         pageElement.insertBefore(newBlock.element, pageElement.children[to]);
     }
     currentPage.blocks.splice(to, 0, newBlock);
-    return newBlock;
 }
 
-function removeBlock(data) {
-    var index = currentPage.blocks.indexOf(data);
+function refreshNewBlockData(blockId, blockData) {
+    for (var block of currentPage.blocks) {
+        if (block.id == blockId) {
+            block.block_data = blockData.block_data;
+            onDataChange(block);
+            return;
+        }
+    }
+}
+
+function removeBlockAndNotify(blockId) {
+    removeBlock(blockId);
+    notifyRemovedBlock(blockId);
+}
+
+function removeBlock(blockId) {
+    var index = currentPage.blocks.findIndex(item => item.id == blockId);
+    var data = currentPage.blocks[index];
 
     data.element.remove();
     currentPage.blocks.splice(index, 1);
@@ -125,27 +147,3 @@ function removeBlock(data) {
         createEmptyPageHint();
     }
 }
-
-addEventListener("load", () => {
-    var currentPageId = 1;
-
-    callAuthorisedApi("/api/get_page", { pageId: currentPageId })
-        .then((response) => {
-            console.log("Recived page data", response.content);
-            document.getElementById("page_name").innerText = response.content.name;
-            document.getElementById("page_owner").innerText = response.content.owner_name;
-            currentPage = response.content;
-            rebuildContents();
-        });
-
-    var pageSocket = new WebSocket(`ws://localhost:8080/api/ws/page?page_id=${currentPageId}`);
-    pageSocket.addEventListener("open", (e) => {
-        console.log("Opened page edit socket");
-    });
-    pageSocket.addEventListener("close", (e) => {
-        console.log("Closed page edit socket", e);
-    });
-    pageSocket.addEventListener("message", (e) => {
-        console.log("Recived message on page edit socket", e);
-    });
-});

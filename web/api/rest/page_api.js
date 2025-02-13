@@ -1,4 +1,5 @@
 import { getPageData } from "../../../backend/interface/page_database.js";
+import { getOpenSessionPageData } from "../websocket/editor.js";
 import { addAuthorisedHandler, assertFieldFormat } from "./rest_api.js";
 
 export function buildPageApi() {
@@ -10,7 +11,7 @@ export function buildPageApi() {
         if (failedAssertionResponse) return failedAssertionResponse;
         return {
             status: "success",
-            content: await getPageData(req.body.pageId)
+            content: getOpenSessionPageData(req.body.pageId) || await getPageData(req.body.pageId)
         }
-    })
+    });
 }

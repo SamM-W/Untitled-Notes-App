@@ -1,9 +1,10 @@
 var BLOCK_DEFS = {};
 function addBlockHandling(type, description, handler) {
     BLOCK_DEFS[type] = {description, handler};
-    return {
-        withOnCreate: (onCreate) => { BLOCK_DEFS[type].onCreate = onCreate; }
-    }
+    var builder = {};
+    builder.withOnCreate = (onCreate) => { BLOCK_DEFS[type].onCreate = onCreate; return builder; };
+    builder.withOnDataChange = (onDataChange) => { BLOCK_DEFS[type].onDataChange = onDataChange; return builder; }
+    return builder;
 }
 
 //Provide some generic functions for the blocks
@@ -14,11 +15,11 @@ function handleGenericTextBox(className, data) {
     textArea.innerText = data.block_data.text_content ? data.block_data.text_content : "";
     textArea.addEventListener("input", (e) => {
         data.block_data.text_content = textArea.innerText;
-        notifyPageChanged();
+        notifyBlockChanged(data);
     });
     textArea.addEventListener("keydown", (e) => {
         if (e.code == "Backspace" && textArea.innerText == "") {
-            removeBlock(data);
+            removeBlockAndNotify(data.id);
         } else if (e.code == "Enter") {
             e.preventDefault();
             insertNewBlockByUser(currentPage.blocks.indexOf(data) + 1, "text");
@@ -63,6 +64,10 @@ function buildInnerBlock(data) {
 
 function onUserCreateBlock(data) {
     (BLOCK_DEFS[data.type].onCreate ? BLOCK_DEFS[data.type].onCreate : ()=>{})(data);
+}
+
+function onDataChange(data) {
+    (BLOCK_DEFS[data.type].onDataChange ? BLOCK_DEFS[data.type].onDataChange : ()=>{})(data);
 }
 
 //Also put in the buttons to the add block menu

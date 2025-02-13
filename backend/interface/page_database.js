@@ -11,10 +11,14 @@ export async function getPageData(pageId) {
     var pageBlocks = await database.promisedAll(`SELECT "id", "position", "type" FROM page_blocks WHERE page_id = ? ORDER BY "position"`, [pageId]);
     
     for (var pageBlock of pageBlocks) {
+        delete pageBlock.position;
         var type = TYPE_NAME_MAP[pageBlock.type];
         if (type != undefined) {
-            var typeContent = await database.promisedGet(`SELECT * FROM page_blocks_additional_${type} WHERE block_id = ?`, [pageBlock.id]);    
+            var typeContent = await database.promisedGet(`SELECT * FROM page_blocks_additional_${type} WHERE block_id = ? AND page_id = ?`, [pageBlock.id, pageId]);    
+
+            delete typeContent.page_id;
             delete typeContent.block_id;
+            
             if (typeContent != undefined)
                 pageBlock.block_data = typeContent;
         }
@@ -23,6 +27,5 @@ export async function getPageData(pageId) {
 
     page.owner_name = await getUserNameOfId(page.owner_id);
     page.blocks = pageBlocks ? pageBlocks : [];
-    console.log(page);
     return page;
 }

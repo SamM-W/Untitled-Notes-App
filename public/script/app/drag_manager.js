@@ -48,7 +48,7 @@ function placeDraggingElement(element) {
         indexToPlaceAt++;
     }
 
-    moveBlock(draggingTargetIndex, indexToPlaceAt);
+    moveBlockAndNotify(draggingTargetIndex, indexToPlaceAt);
 
     element.classList.remove("dragged-app-block");
     element.style.top = 0;
