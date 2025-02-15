@@ -5,22 +5,31 @@ database.serialize();
 
 var needsCommitToFile = false;;
 
-function promisedGet(query, params) {
+async function promisedGet(query, params) {
     return new Promise((accept, reject) => {
         database.get(query, params, (err, data) => {
             if (err) reject(err)
             else accept(data)
         })
-    });
+    }).catch((err)=>{if (err) console.log("Error in sql statement", query, params, err)});
 }
 
-function promisedAll(query, params) {
+async function promisedAll(query, params) {
     return new Promise((accept, reject) => {
         database.all(query, params, (err, data) => {
             if (err) reject(err)
             else accept(data)
         })
-    });
+    }).catch((err)=>{if (err) console.log("Error in sql statement", query, params, err)});
+}
+
+async function promisedRun(query, params) {
+    return new Promise((accept, reject) => {
+        database.run(query, params, (err) => {
+            if (err) reject(err)
+            else accept()
+        })
+    }).catch((err)=>{console.log("Error in sql statement", query, params, err)});
 }
 
 setInterval(() => {
@@ -37,5 +46,5 @@ function getLastInsertedRowId() {
 }
 
 export default {
-    getLastInsertedRowId, promisedGet, promisedAll
+    getLastInsertedRowId, promisedGet, promisedAll, promisedRun
 }

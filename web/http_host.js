@@ -7,7 +7,7 @@ import { addWebsocketRoute } from "./ws_host.js";
 console.log("Starting web...");
 
 const app = express();
-
+  
 expressWs(app);
 addWebsocketRoute(app);
 
@@ -18,15 +18,21 @@ app.all("/api/*", async (req, res) => {
     res.end(JSON.stringify(apiResponse));
 });
 
+const filepathOfPath = /^[^?]*/;
+const extensionOfFilepath = /\.[^(.)]*$/;
 app.use((req, res, next) => {
+    var filepath = filepathOfPath.exec(req.path)[0];
+    var afterFilePath = filepath.substring(filepath.length);
+    var extensionMatch = extensionOfFilepath.exec(filepath);
     //If the request is to /, send request to /index.html
-    if (req.path == '/') {
+    if (req.url.pathname == '/') {
         req.url = '/index.html';
     }
     //Add .html in the case that the request path doesent include a file extension
-    if (!req.path.includes('.')) {
-        req.url += '.html';
+    if (extensionMatch == null) {
+        filepath += '.html';
     }
+    req.url = filepath + afterFilePath;
     next();
 });
 
@@ -37,8 +43,6 @@ app.use(express.static('public', {
     }
 }));
 
-
-
 app.listen(8080, () => {
     console.log("Listening on 8080, and serving ./public");
-})
+});

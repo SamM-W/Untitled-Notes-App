@@ -40,10 +40,12 @@ function applyJsCompiles(body) {
     return result;
 }
 
+const filepathOfPath = /^[^?]*/;
 export function useStaticCompiles(app) {
     app.use((req, res, next) => {
-        if (req.path.endsWith('.html') || req.path.endsWith('.htm') || req.path == '/') {
-            const filePath = `./public${req.path}`;
+        var filepath = filepathOfPath.exec(req.path)[0];
+        if (filepath.endsWith('.html') || filepath.endsWith('.htm') || filepath == '/') {
+            const filePath = `./public${filepath}`;
             if (fs.existsSync(filePath)) {            
                 if (rebuildPartialsOnRequest) partials = buildPartials();
 
@@ -54,8 +56,8 @@ export function useStaticCompiles(app) {
                 res.send(body);
                 return;
             }
-        } else if (req.path.endsWith('.compile.js')) {
-            const filePath = `./public${req.path}`;
+        } else if (filepath.endsWith('.compile.js')) {
+            const filePath = `./public${filepath}`;
             if (fs.existsSync(filePath)) {
                 let body = fs.readFileSync(filePath).toString();
                 body = applyJsCompiles(body);

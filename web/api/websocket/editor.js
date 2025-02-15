@@ -1,4 +1,4 @@
-import { getPageData } from "../../../backend/interface/page_database.js";
+import { getPageData, savePageData } from "../../../backend/interface/page_database.js";
 
 var activeSessions = {};
 
@@ -28,6 +28,7 @@ class LivePageSession {
         }
         this.activeSockets = [];
         this.debugUUID = crypto.randomUUID();
+        this.nextSyncTimeout = undefined;
     }
 
     addConnection(ws, userId) {
@@ -66,6 +67,15 @@ class LivePageSession {
         } else if (body.type == "block_changed") {
             this.blockOfId(body.block.id).block_data = body.block.block_data;
             this.sendPageUpdateToOthers(socket, "block_changed", { block: body.block })
+        }
+
+        if (!this.nextSyncTimeout) {
+            var session = this;
+            this.nextSyncTimeout = setTimeout(()=>{
+                savePageData(session.pageData)
+                    .catch((err)=>{if (err) console.log("Error in page serialisation", err)});
+                this.nextSyncTimeout = undefined;
+            }, 10000);
         }
     }
 
